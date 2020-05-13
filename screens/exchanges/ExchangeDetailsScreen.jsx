@@ -7,7 +7,7 @@ import {
 } from '@react-navigation/stack';
 
 
-export default function ProductDetailsScreen({ navigation }) {
+export default function ExchangeDetailsScreen({ navigation }) {
   navigation.setOptions({
     ...TransitionPresets.ModalPresentationIOS,
   });

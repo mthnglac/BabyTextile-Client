@@ -1,37 +1,29 @@
 import * as React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-import TopTabScreen from '../../screens/products/top-tabs/TopTabScreen';
+import BestSellersScreen from '../../screens/chart/top-tabs/BestSellersScreen';
+import YearlyScreen from '../../screens/chart/top-tabs/YearlyScreen';
 
 const TopTab = createMaterialTopTabNavigator();
-const INITIAL_ROUTE_NAME = 'Bathrobe';
+const INITIAL_ROUTE_NAME = 'BestSeller';
 const screenInfo = [
-  // TopFirst
+  // BestSeller
   {
-    name: 'Bathrobe',
-    component: TopTabScreen,
+    name: 'BestSeller',
+    component: BestSellersScreen,
     options: {
-      title: 'Bornoz',
+      title: 'EN ÇOK SATAN',
     },
   },
-  // TopSecond
+  // Yearly
   {
-    name: 'Pyjamas',
-    component: TopTabScreen,
+    name: 'Yearly',
+    component: YearlyScreen,
     options: {
-      title: 'Pijama',
-    },
-  },
-  // TopThird
-  {
-    name: 'Hat',
-    component: TopTabScreen,
-    options: {
-      title: 'Şapka',
+      title: 'AYLARA GÖRE SATIŞ',
     },
   },
 ];
-
 
 export default function TopTabNavigator() {
   return (
