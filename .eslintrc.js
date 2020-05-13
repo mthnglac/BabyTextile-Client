@@ -29,7 +29,7 @@ module.exports = {
     'global-require': 0,
     // console.log stuff
     'no-console': 'off',
-    // props validation ignoring for navigation
+    // props validation ignoring for react navigation
     'react/prop-types': ['error', { ignore: ['navigation'] }],
   },
 };

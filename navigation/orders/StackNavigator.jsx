@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import TopTabNavigator from './TopTabNavigator';
-import ProductDetailsScreen from '../../screens/products/ProductDetailsScreen';
+import TopTabNavigator from './TopTapNavigator';
+import OrderDetailsScreen from '../../screens/orders/OrderDetailsScreen';
 import CartIcon from '../../components/CartIcon';
 
 const Stack = createStackNavigator();
-const INITIAL_ROUTE_NAME = 'Ürünler';
-const INITIAL_HEADER_TITLE = 'Ürünler';
+const INITIAL_ROUTE_NAME = 'Siparişler';
+const INITIAL_HEADER_TITLE = 'Siparişler';
 const screenInfo = [
   // TopTabNavigator
   {
@@ -21,8 +21,8 @@ const screenInfo = [
   },
   // Details
   {
-    name: 'ProductDetails',
-    component: ProductDetailsScreen,
+    name: 'Details',
+    component: OrderDetailsScreen,
     options: {
       headerRight: () => (
         <CartIcon />

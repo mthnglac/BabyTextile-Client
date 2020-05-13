@@ -10,8 +10,8 @@ import ProfileScreen from '../screens/profile/ProfileScreen';
 import TabBarIcon from '../components/TabBarIcon';
 import Colors from '../constants/Colors';
 
-const purple = '#694fad';
 const BottomTab = createMaterialBottomTabNavigator();
+const purple = '#694fad';
 const INITIAL_ROUTE_NAME = 'Products';
 const screenInfo = [
   // ProductsScreen
@@ -95,9 +95,9 @@ export default function BottomTabNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
-  navigation.setOptions({
-    headerTitle: getHeaderTitle(route)
-  });
+  // navigation.setOptions({
+  //   headerTitle: getHeaderTitle(route)
+  // });
 
   return (
     <BottomTab.Navigator
@@ -105,6 +105,7 @@ export default function BottomTabNavigator({ navigation, route }) {
       activeColor={Colors.tabIconSelected}
       inactiveColor={Colors.tabIconDefault}
       barStyle={{ backgroundColor: purple }}
+      sceneAnimationEnabled={false}
     >
       {screenInfo.flatMap((screen, index) => (
         <BottomTab.Screen
