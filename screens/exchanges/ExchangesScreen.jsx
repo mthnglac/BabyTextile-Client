@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import TopTabNavigator from '../../navigation/exchanges/TopTapNavigator';
+import StackNavigator from '../../navigation/exchanges/StackNavigator';
 
 const white = '#fff';
 const styles = StyleSheet.create({
@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
 export default function ExchangesScreen() {
   return (
     <View style={styles.container}>
-      <TopTabNavigator />
+      <StackNavigator />
     </View>
   );
 }
