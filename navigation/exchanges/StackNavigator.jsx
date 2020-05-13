@@ -2,16 +2,16 @@ import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import TopTabNavigator from './TopTabNavigator';
-import ProductDetailsScreen from '../../screens/products/ProductDetailsScreen';
+import ExchangeDetailsScreen from '../../screens/exchanges/ExchangeDetailsScreen';
 import CartIcon from '../../components/CartIcon';
 
 const Stack = createStackNavigator();
-const INITIAL_ROUTE_NAME = 'Products';
-const INITIAL_HEADER_TITLE = 'Ürünler';
+const INITIAL_ROUTE_NAME = 'Exchanges';
+const INITIAL_HEADER_TITLE = 'Değişimler';
 const screenInfo = [
-  // Products
+  // Exchanges
   {
-    name: 'Products',
+    name: 'Exchanges',
     component: TopTabNavigator,
     options: {
       headerRight: () => (
@@ -19,10 +19,10 @@ const screenInfo = [
       ),
     },
   },
-  // ProductDetails
+  // ExchangeDetails
   {
-    name: 'ProductDetails',
-    component: ProductDetailsScreen,
+    name: 'ExchangeDetails',
+    component: ExchangeDetailsScreen,
     options: {
       headerRight: () => (
         <CartIcon />

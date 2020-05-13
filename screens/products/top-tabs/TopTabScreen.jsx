@@ -5,7 +5,9 @@ import {
 } from 'react-native';
 import { useScrollToTop } from '@react-navigation/native';
 import { FlatList } from 'react-native-gesture-handler';
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
+
+import ModalActivityIndicator from '../../../components/ModalActivityIndicator';
 import { fetchAllProductFirstImages } from '../../../constants/fetchAPI/product';
 import settings from '../../../constants/fetchAPI/config/base';
 
@@ -35,6 +37,7 @@ const styles = StyleSheet.create({
   },
 });
 
+
 async function getAllProductFirstImages() {
   // initial variables
   let userToken;
@@ -53,7 +56,8 @@ async function getAllProductFirstImages() {
   );
 }
 
-export default function TopThirdScreen({ navigation }) {
+
+export default function TopFirstScreen({ navigation }) {
   const ref = React.useRef(null);
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
@@ -63,10 +67,10 @@ export default function TopThirdScreen({ navigation }) {
             ...prevState,
             products_all: action.products,
           };
-        case 'asd':
+        case 'INDICATOR':
           return {
             ...prevState,
-            products_all: action.products,
+            screenIsWaiting: action.isFinished,
           };
         case 'PROffafaDUCTS':
           return {
@@ -79,12 +83,16 @@ export default function TopThirdScreen({ navigation }) {
     },
     {
       products_all: [],
+      screenIsWaiting: false,
     },
   );
 
   React.useEffect(
+    // eslint-disable-next-line react/prop-types
     () => navigation.addListener('focus', async () => {
+      dispatch({ type: 'INDICATOR', isFinished: true });
       const responseJSON = await getAllProductFirstImages();
+      dispatch({ type: 'INDICATOR', isFinished: false });
       dispatch({ type: 'PRODUCTS', products: responseJSON });
     }),
     [],
@@ -92,7 +100,7 @@ export default function TopThirdScreen({ navigation }) {
 
   useScrollToTop(ref);
 
-  const formatData = (funcData, funcNumColumns) => {
+  function formatData(funcData, funcNumColumns) {
     const numberOfFullRows = Math.floor(funcData.length / funcNumColumns);
 
     let numberOfElementsLastRow = funcData.length - (numberOfFullRows * funcNumColumns);
@@ -101,9 +109,9 @@ export default function TopThirdScreen({ navigation }) {
       numberOfElementsLastRow++;
     }
     return funcData;
-  };
+  }
 
-  const renderItemFunc = ({ item }) => {
+  function renderItemFunc({ item }) {
     if (item.empty === true) {
       return <View style={[styles.box, styles.boxInvisible]} />;
     }
@@ -112,14 +120,15 @@ export default function TopThirdScreen({ navigation }) {
       <TouchableOpacity
         key={item.pk}
         style={styles.box}
+        onPress={() => navigation.navigate('ProductDetails')}
       >
         <Image style={styles.boxImage} source={{ uri: item.image }} />
       </TouchableOpacity>
     );
-  };
+  }
   renderItemFunc.propTypes = {
     item: PropTypes.shape({
-      pk: PropTypes.string,
+      pk: PropTypes.number,
       image: PropTypes.string,
       empty: PropTypes.bool,
     }),
@@ -128,11 +137,14 @@ export default function TopThirdScreen({ navigation }) {
     item: {},
   };
 
-  // eslint-disable-next-line react/prop-types
-  const keyExtractorFunc = (item) => item.pk;
+  function keyExtractorFunc(item) {
+    // eslint-disable-next-line react/prop-types
+    return item.pk;
+  }
 
   return (
     <SafeAreaView style={styles.container}>
+      <ModalActivityIndicator show={state.screenIsWaiting} />
       <FlatList
         ref={ref}
         data={formatData(state.products_all, numColumns)}

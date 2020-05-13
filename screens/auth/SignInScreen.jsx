@@ -105,7 +105,6 @@ export default function SignInScreen() {
           <View style={styles.inputTextField}>
             <TextInput
               returnKeyType="next"
-              blurOnSubmit={false}
               style={styles.input}
               placeholder="Kullanıcı adı"
               value={username}

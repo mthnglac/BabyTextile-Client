@@ -114,40 +114,37 @@ export default function App(props) {
 
   if (!isLoadingComplete) {
     return null;
-  } else {
-    return (
-      <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
-        <NavigationContainer linking={LinkingConfiguration}>
-          <AuthContext.Provider value={authContext}>
-            <Stack.Navigator>
-              {state.userToken == null ? (
-                <Stack.Screen name="SignIn" component={SignInScreen} options={{ headerShown: false }} />
-              ) : (
-                <Stack.Screen
-                  name="Root"
-                  component={BottomTabNavigator}
-                  options={{
-                    headerRight: () => (
-                      <CartIcon />
-                    ),
-                  }}
-                />
-              )}
-              {/*<Stack.Screen name="SignIn" component={SignInScreen} />*/}
-              {/*<Stack.Screen*/}
-              {/*  name="Root"*/}
-              {/*  component={BottomTabNavigator}*/}
-              {/*  options={{*/}
-              {/*    headerRight: () => (*/}
-              {/*      <CartIcon />*/}
-              {/*    ),*/}
-              {/*  }}*/}
-              {/*/>*/}
-            </Stack.Navigator>
-          </AuthContext.Provider>
-        </NavigationContainer>
-      </View>
-    );
   }
+  return (
+    <View style={styles.container}>
+      {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
+      <NavigationContainer linking={LinkingConfiguration}>
+        <AuthContext.Provider value={authContext}>
+          <Stack.Navigator>
+            {/*{state.userToken == null ? (*/}
+            {/*  <Stack.Screen name="SignIn" component={SignInScreen} options={{ headerShown: false }} />*/}
+            {/*) : (*/}
+            {/*  <Stack.Screen*/}
+            {/*    name="Root"*/}
+            {/*    component={BottomTabNavigator}*/}
+            {/*    options={{*/}
+            {/*      headerShown: false,*/}
+            {/*      headerRight: () => (*/}
+            {/*        <CartIcon />*/}
+            {/*      ),*/}
+            {/*    }}*/}
+            {/*  />*/}
+            {/*)}*/}
+            <Stack.Screen
+              name="Root"
+              component={BottomTabNavigator}
+              options={{
+                headerShown: false,
+              }}
+            />
+          </Stack.Navigator>
+        </AuthContext.Provider>
+      </NavigationContainer>
+    </View>
+  );
 }

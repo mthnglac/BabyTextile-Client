@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-  AsyncStorage, Image, SafeAreaView, StyleSheet, Text, View,
+  Image, SafeAreaView, StyleSheet, Text, View,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
@@ -184,60 +184,6 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
 });
-
-// eslint-disable-next-line no-unused-vars,consistent-return
-async function userInfo() {
-  let userToken;
-  try {
-    userToken = await AsyncStorage.getItem('accessToken');
-  } catch (e) {
-    console.error(e);
-  }
-  try {
-    const response = await fetch('http://192.168.1.7:8000/users/me/', {
-      method: 'GET',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userToken}`,
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
-    return await response.json();
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-// eslint-disable-next-line no-unused-vars,consistent-return
-async function addSupplier() {
-  let userToken;
-  try {
-    userToken = await AsyncStorage.getItem('accessToken');
-  } catch (e) {
-    console.error('ERROR on profile screen', e);
-  }
-  try {
-    const response = await fetch('http://192.168.1.4:8000/users/', {
-      method: 'GET',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userToken}`,
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
-    return await response.json();
-  } catch (e) {
-    console.error(e);
-  }
-}
 
 export default function ProfileScreen() {
   // eslint-disable-next-line no-unused-vars
