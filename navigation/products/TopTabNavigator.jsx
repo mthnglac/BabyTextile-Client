@@ -1,16 +1,15 @@
 import * as React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import TopFirstScreen from '../../screens/products/top-tabs/TopFirstScreen';
-import TopSecondScreen from '../../screens/products/top-tabs/TopSecondScreen';
-import TopThirdScreen from '../../screens/products/top-tabs/TopThirdScreen';
+
+import TopTabScreen from '../../screens/products/top-tabs/TopTabScreen';
 
 const TopTab = createMaterialTopTabNavigator();
-const INITIAL_ROUTE_NAME = 'TopFirstScreen';
+const INITIAL_ROUTE_NAME = 'Bathrobe';
 const screenInfo = [
   // TopFirst
   {
     name: 'Bathrobe',
-    component: TopFirstScreen,
+    component: TopTabScreen,
     options: {
       title: 'Bornoz',
     },
@@ -18,7 +17,7 @@ const screenInfo = [
   // TopSecond
   {
     name: 'Pyjamas',
-    component: TopSecondScreen,
+    component: TopTabScreen,
     options: {
       title: 'Pijama',
     },
@@ -26,7 +25,7 @@ const screenInfo = [
   // TopThird
   {
     name: 'Hat',
-    component: TopThirdScreen,
+    component: TopTabScreen,
     options: {
       title: 'Şapka',
     },
