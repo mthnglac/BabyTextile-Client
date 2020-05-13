@@ -56,7 +56,6 @@ async function getAllProductFirstImages() {
   );
 }
 
-
 export default function TopFirstScreen({ navigation }) {
   const ref = React.useRef(null);
   const [state, dispatch] = React.useReducer(
