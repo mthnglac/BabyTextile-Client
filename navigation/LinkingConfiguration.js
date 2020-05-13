@@ -5,9 +5,18 @@ export default {
   config: {
     Root: {
       path: 'root',
+      initialRouteName: 'profile',
       screens: {
-        Home: 'home',
-        Links: 'links',
+        Products: 'products',
+        Orders: 'orders',
+        Exchanges: 'exchanges',
+        Chart: 'chart',
+        Profile: {
+          path: 'user/:id',
+          parse: {
+            id: (id) => `there, ${id}`,
+          },
+        },
       },
     },
   },
