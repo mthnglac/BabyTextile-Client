@@ -6,6 +6,8 @@ import {
 import { useScrollToTop } from '@react-navigation/native';
 import { FlatList } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
+
+import ModalActivityIndicator from '../../../components/ModalActivityIndicator';
 import { fetchAllProductFirstImages } from '../../../constants/fetchAPI/product';
 import settings from '../../../constants/fetchAPI/config/base';
 
@@ -35,6 +37,7 @@ const styles = StyleSheet.create({
   },
 });
 
+
 async function getAllProductFirstImages() {
   // initial variables
   let userToken;
@@ -53,6 +56,7 @@ async function getAllProductFirstImages() {
   );
 }
 
+
 export default function TopFirstScreen({ navigation }) {
   const ref = React.useRef(null);
   const [state, dispatch] = React.useReducer(
@@ -63,10 +67,10 @@ export default function TopFirstScreen({ navigation }) {
             ...prevState,
             products_all: action.products,
           };
-        case 'asd':
+        case 'INDICATOR':
           return {
             ...prevState,
-            products_all: action.products,
+            screenIsWaiting: action.isFinished,
           };
         case 'PROffafaDUCTS':
           return {
@@ -79,13 +83,16 @@ export default function TopFirstScreen({ navigation }) {
     },
     {
       products_all: [],
+      screenIsWaiting: false,
     },
   );
 
   React.useEffect(
     // eslint-disable-next-line react/prop-types
     () => navigation.addListener('focus', async () => {
+      dispatch({ type: 'INDICATOR', isFinished: true });
       const responseJSON = await getAllProductFirstImages();
+      dispatch({ type: 'INDICATOR', isFinished: false });
       dispatch({ type: 'PRODUCTS', products: responseJSON });
     }),
     [],
@@ -135,9 +142,9 @@ export default function TopFirstScreen({ navigation }) {
     return item.pk;
   }
 
-
   return (
     <SafeAreaView style={styles.container}>
+      <ModalActivityIndicator show={state.screenIsWaiting} />
       <FlatList
         ref={ref}
         data={formatData(state.products_all, numColumns)}
