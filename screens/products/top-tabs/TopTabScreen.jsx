@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
   AsyncStorage, Image, SafeAreaView, StyleSheet,
-  TouchableOpacity, View, Dimensions,
+  TouchableOpacity, View, Dimensions, RefreshControl,
 } from 'react-native';
 import { useScrollToTop } from '@react-navigation/native';
 import { FlatList } from 'react-native-gesture-handler';
@@ -57,6 +57,7 @@ async function getAllProductFirstImages() {
 }
 
 export default function TopFirstScreen({ navigation }) {
+  // const [refreshing, setRefreshing] = React.useState(false);
   const ref = React.useRef(null);
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
@@ -66,15 +67,15 @@ export default function TopFirstScreen({ navigation }) {
             ...prevState,
             products_all: action.products,
           };
+        case 'REFRESH':
+          return {
+            ...prevState,
+            refreshing: action.isRefresh,
+          };
         case 'INDICATOR':
           return {
             ...prevState,
             screenIsWaiting: action.isFinished,
-          };
-        case 'PROffafaDUCTS':
-          return {
-            ...prevState,
-            products_all: action.products,
           };
         default:
           return state;
@@ -83,17 +84,33 @@ export default function TopFirstScreen({ navigation }) {
     {
       products_all: [],
       screenIsWaiting: false,
+      refreshing: false,
     },
+  );
+
+  const onRefresh = React.useCallback(
+    async () => {
+      dispatch({ type: 'REFRESH', isRefresh: true });
+      const responseJSON = await getAllProductFirstImages();
+      dispatch({ type: 'PRODUCTS', products: responseJSON });
+      dispatch({ type: 'REFRESH', isRefresh: false });
+      console.log('hello');
+    },
+    [state.refreshing],
   );
 
   React.useEffect(
     // eslint-disable-next-line react/prop-types
-    () => navigation.addListener('focus', async () => {
-      dispatch({ type: 'INDICATOR', isFinished: true });
-      const responseJSON = await getAllProductFirstImages();
-      dispatch({ type: 'INDICATOR', isFinished: false });
-      dispatch({ type: 'PRODUCTS', products: responseJSON });
-    }),
+    () => {
+      async function loadDataAsync() {
+        dispatch({ type: 'INDICATOR', isFinished: true });
+        const responseJSON = await getAllProductFirstImages();
+        dispatch({ type: 'INDICATOR', isFinished: false });
+        dispatch({ type: 'PRODUCTS', products: responseJSON });
+      }
+
+      loadDataAsync();
+    },
     [],
   );
 
@@ -114,12 +131,12 @@ export default function TopFirstScreen({ navigation }) {
     if (item.empty === true) {
       return <View style={[styles.box, styles.boxInvisible]} />;
     }
-
     return (
       <TouchableOpacity
         key={item.pk}
         style={styles.box}
         onPress={() => navigation.navigate('ProductDetails')}
+        // onPress={() => onSelect(item.pk)}
       >
         <Image style={styles.boxImage} source={{ uri: item.image }} />
       </TouchableOpacity>
@@ -150,6 +167,13 @@ export default function TopFirstScreen({ navigation }) {
         renderItem={renderItemFunc}
         numColumns={numColumns}
         keyExtractor={keyExtractorFunc}
+        // extraData={state.selected}
+        refreshControl={(
+          <RefreshControl
+            onRefresh={onRefresh}
+            refreshing={state.refreshing}
+          />
+        )}
       />
     </SafeAreaView>
   );
