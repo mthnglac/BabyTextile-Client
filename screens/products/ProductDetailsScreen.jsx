@@ -1,10 +1,16 @@
 import * as React from 'react';
 import {
-  View, Button, Text,
+  StyleSheet, View, Button, Text,
 } from 'react-native';
 import {
   TransitionPresets,
 } from '@react-navigation/stack';
+
+const styles = StyleSheet.create({
+  flex: 1,
+  alignItems: 'center',
+  justifyContent: 'center',
+});
 
 
 export default function ProductDetailsScreen({ navigation }) {
@@ -12,7 +18,7 @@ export default function ProductDetailsScreen({ navigation }) {
     ...TransitionPresets.ModalPresentationIOS,
   });
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={styles.container}>
       <Text>Details Screen</Text>
       <Button
         title="Go back!"
