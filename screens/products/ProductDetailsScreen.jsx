@@ -7,16 +7,21 @@ import {
 } from '@react-navigation/stack';
 
 const styles = StyleSheet.create({
-  flex: 1,
-  alignItems: 'center',
-  justifyContent: 'center',
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 
 
 export default function ProductDetailsScreen({ navigation }) {
-  navigation.setOptions({
-    ...TransitionPresets.ModalPresentationIOS,
-  });
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      ...TransitionPresets.ModalPresentationIOS,
+    });
+  }, [navigation]);
+
   return (
     <View style={styles.container}>
       <Text>Details Screen</Text>
