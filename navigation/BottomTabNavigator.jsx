@@ -42,7 +42,7 @@ const screenInfo = [
     component: ExchangesScreen,
     options: {
       title: 'Değişimler',
-      tabBarLabel: 'Siparişler',
+      tabBarLabel: 'Değişimler',
       tabBarColor: '#8AD879',
       tabBarIcon: ({ focused, color }) => <TabBarIcon focused={focused} name="sync-alt" color={color} />
     },
