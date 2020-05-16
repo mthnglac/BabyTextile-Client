@@ -22,7 +22,8 @@ const screenInfo = [
       title: 'Ürünler',
       tabBarLabel: 'Ürünler',
       tabBarColor: '#F3533A',
-      tabBarIcon: ({ focused, color }) => <TabBarIcon focused={focused} name="baby-carriage" color={color} />
+      // eslint-disable-next-line react/prop-types
+      tabBarIcon: ({ focused, color }) => <TabBarIcon focused={focused} name="baby-carriage" color={color} />,
     },
   },
   // Orders Screen
@@ -33,7 +34,8 @@ const screenInfo = [
       title: 'Siparişler',
       tabBarLabel: 'Siparişler',
       tabBarColor: '#FA9F42',
-      tabBarIcon: ({ focused, color }) => <TabBarIcon focused={focused} name={focused ? 'box-open' : 'box'} color={color} />
+      // eslint-disable-next-line react/prop-types
+      tabBarIcon: ({ focused, color }) => <TabBarIcon focused={focused} name={focused ? 'box-open' : 'box'} color={color} />,
     },
   },
   // Exchanges Screen
@@ -44,7 +46,8 @@ const screenInfo = [
       title: 'Değişimler',
       tabBarLabel: 'Değişimler',
       tabBarColor: '#8AD879',
-      tabBarIcon: ({ focused, color }) => <TabBarIcon focused={focused} name="sync-alt" color={color} />
+      // eslint-disable-next-line react/prop-types
+      tabBarIcon: ({ focused, color }) => <TabBarIcon focused={focused} name="sync-alt" color={color} />,
     },
   },
   // Chart Screen
@@ -55,7 +58,8 @@ const screenInfo = [
       title: 'Analiz',
       tabBarLabel: 'Analiz',
       tabBarColor: '#5ACFC9',
-      tabBarIcon: ({ focused, color }) => <TabBarIcon focused={focused} name="chart-bar" color={color} />
+      // eslint-disable-next-line react/prop-types
+      tabBarIcon: ({ focused, color }) => <TabBarIcon focused={focused} name="chart-bar" color={color} />,
     },
   },
   // Profile Screen
@@ -66,39 +70,14 @@ const screenInfo = [
       title: 'Profil',
       tabBarLabel: 'Profil',
       tabBarColor: '#659EBF',
-      tabBarIcon: ({ focused, color }) => <TabBarIcon focused={focused} name="user" color={color} />
+      // eslint-disable-next-line react/prop-types
+      tabBarIcon: ({ focused, color }) => <TabBarIcon focused={focused} name="user" color={color} />,
     },
   },
 ];
 
-function getHeaderTitle(route) {
-  const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
 
-  switch (routeName) {
-    case 'Products':
-      return 'Ürünler';
-    case 'Orders':
-      return 'Siparişler';
-    case 'Exchanges':
-      return 'Değişimler';
-    case 'Chart':
-      return 'Analiz';
-    case 'Profile':
-      return 'Profil';
-    default:
-      return 'Ürünler';
-  }
-}
-
-
-export default function BottomTabNavigator({ navigation, route }) {
-  // Set the header title on the parent stack navigator depending on the
-  // currently active tab. Learn more in the documentation:
-  // https://reactnavigation.org/docs/en/screen-options-resolution.html
-  // navigation.setOptions({
-  //   headerTitle: getHeaderTitle(route)
-  // });
-
+export default function BottomTabNavigator() {
   return (
     <BottomTab.Navigator
       initialRouteName={INITIAL_ROUTE_NAME}

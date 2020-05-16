@@ -8,7 +8,6 @@ import useCachedResources from './hooks/useCachedResources';
 import LinkingConfiguration from './navigation/LinkingConfiguration';
 import AuthContext from './constants/auth/AuthContext';
 
-// eslint-disable-next-line import/no-named-as-default,import/no-named-as-default-member
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import SignInScreen from './screens/auth/SignInScreen';
 import CartIcon from './components/CartIcon';
