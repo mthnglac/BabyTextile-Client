@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
   },
 });
 
+// eslint-disable-next-line no-unused-vars
 export default function App(props) {
   const isLoadingComplete = useCachedResources();
 
