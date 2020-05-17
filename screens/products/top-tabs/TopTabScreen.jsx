@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
   Image, SafeAreaView, StyleSheet,
-  TouchableOpacity, View, Dimensions, RefreshControl,
+  TouchableOpacity, View, RefreshControl,
 } from 'react-native';
 import { useScrollToTop } from '@react-navigation/native';
 import { FlatList } from 'react-native-gesture-handler';
@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import ModalActivityIndicator from '../../../components/ModalActivityIndicator';
 import FuncContext from '../../../constants/products/FuncContext';
 import StateContext from '../../../constants/products/StateContext';
+import { width } from '../../../constants/Layout';
 
 const pink = 'pink';
 const brown = '#4D243D';
@@ -26,7 +27,7 @@ const styles = StyleSheet.create({
     backgroundColor: brown,
     alignItems: 'center',
     justifyContent: 'center',
-    height: Dimensions.get('window').width / numColumns, // approximate a square
+    height: width / numColumns, // approximate a square
   },
   boxImage: {
     resizeMode: 'cover',
