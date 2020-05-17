@@ -1,15 +1,16 @@
 import * as React from 'react';
 import {
-  AsyncStorage, Image, SafeAreaView, StyleSheet,
-  TouchableOpacity, View, Dimensions, RefreshControl,
+  Image, SafeAreaView, StyleSheet,
+  TouchableOpacity, View, RefreshControl,
 } from 'react-native';
 import { useScrollToTop } from '@react-navigation/native';
 import { FlatList } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
 
 import ModalActivityIndicator from '../../../components/ModalActivityIndicator';
-import { fetchAllProductFirstImages } from '../../../constants/fetchAPI/product';
-import settings from '../../../constants/fetchAPI/config/base';
+import FuncContext from '../../../constants/products/FuncContext';
+import StateContext from '../../../constants/products/StateContext';
+import { width } from '../../../constants/Layout';
 
 const pink = 'pink';
 const brown = '#4D243D';
@@ -26,7 +27,7 @@ const styles = StyleSheet.create({
     backgroundColor: brown,
     alignItems: 'center',
     justifyContent: 'center',
-    height: Dimensions.get('window').width / numColumns, // approximate a square
+    height: width / numColumns, // approximate a square
   },
   boxImage: {
     resizeMode: 'cover',
@@ -38,80 +39,32 @@ const styles = StyleSheet.create({
 });
 
 
-async function getAllProductFirstImages() {
-  // initial variables
-  let userToken;
-
-  // get token
-  try {
-    userToken = await AsyncStorage.getItem('accessToken');
-  } catch (e) {
-    console.error(e);
-  }
-
-  // get & return products
-  return fetchAllProductFirstImages(
-    `${settings.prefix}://${settings.domain}`,
-    userToken,
-  );
-}
-
 export default function TopFirstScreen({ navigation }) {
-  // const [refreshing, setRefreshing] = React.useState(false);
+  const { categorizedProductList } = React.useContext(FuncContext);
+  const { state, dispatch } = React.useContext(StateContext);
   const ref = React.useRef(null);
-  const [state, dispatch] = React.useReducer(
-    (prevState, action) => {
-      switch (action.type) {
-        case 'PRODUCTS':
-          return {
-            ...prevState,
-            products_all: action.products,
-          };
-        case 'REFRESH':
-          return {
-            ...prevState,
-            refreshing: action.isRefresh,
-          };
-        case 'INDICATOR':
-          return {
-            ...prevState,
-            screenIsWaiting: action.isFinished,
-          };
-        default:
-          return state;
+
+  React.useEffect(
+    () => {
+      async function loadDataAsync() {
+        dispatch({ type: 'INDICATOR', isFinished: true });
+        const responseJSON = await categorizedProductList();
+        dispatch({ type: 'INDICATOR', isFinished: false });
+        dispatch({ type: 'PRODUCTS', products: responseJSON });
       }
+      loadDataAsync();
     },
-    {
-      products_all: [],
-      screenIsWaiting: false,
-      refreshing: false,
-    },
+    [],
   );
 
   const onRefresh = React.useCallback(
     async () => {
       dispatch({ type: 'REFRESH', isRefresh: true });
-      const responseJSON = await getAllProductFirstImages();
+      const responseJSON = await categorizedProductList();
       dispatch({ type: 'PRODUCTS', products: responseJSON });
       dispatch({ type: 'REFRESH', isRefresh: false });
-      console.log('hello');
     },
     [state.refreshing],
-  );
-
-  React.useEffect(
-    // eslint-disable-next-line react/prop-types
-    () => {
-      async function loadDataAsync() {
-        dispatch({ type: 'INDICATOR', isFinished: true });
-        const responseJSON = await getAllProductFirstImages();
-        dispatch({ type: 'INDICATOR', isFinished: false });
-        dispatch({ type: 'PRODUCTS', products: responseJSON });
-      }
-
-      loadDataAsync();
-    },
-    [],
   );
 
   useScrollToTop(ref);
@@ -167,7 +120,7 @@ export default function TopFirstScreen({ navigation }) {
         renderItem={renderItemFunc}
         numColumns={numColumns}
         keyExtractor={keyExtractorFunc}
-        // extraData={state.selected}
+        extraData={state.products_all}
         refreshControl={(
           <RefreshControl
             onRefresh={onRefresh}

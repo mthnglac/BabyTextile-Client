@@ -8,9 +8,12 @@ import {
 
 
 export default function ExchangeDetailsScreen({ navigation }) {
-  navigation.setOptions({
-    ...TransitionPresets.ModalPresentationIOS,
-  });
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      ...TransitionPresets.ModalPresentationIOS,
+    });
+  }, [navigation]);
+
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Details Screen</Text>
