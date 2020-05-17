@@ -7,7 +7,6 @@ import { useScrollToTop } from '@react-navigation/native';
 import { FlatList } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
 
-import ModalActivityIndicator from '../../../components/ModalActivityIndicator';
 import FuncContext from '../../../constants/products/FuncContext';
 import StateContext from '../../../constants/products/StateContext';
 import { width } from '../../../constants/Layout';
@@ -47,9 +46,7 @@ export default function TopFirstScreen({ navigation }) {
   React.useEffect(
     () => {
       async function loadDataAsync() {
-        dispatch({ type: 'INDICATOR', isFinished: true });
         const responseJSON = await categorizedProductList();
-        dispatch({ type: 'INDICATOR', isFinished: false });
         dispatch({ type: 'PRODUCTS', products: responseJSON });
       }
       loadDataAsync();
@@ -89,7 +86,6 @@ export default function TopFirstScreen({ navigation }) {
         key={item.pk}
         style={styles.box}
         onPress={() => navigation.navigate('ProductDetails')}
-        // onPress={() => onSelect(item.pk)}
       >
         <Image style={styles.boxImage} source={{ uri: item.image }} />
       </TouchableOpacity>
@@ -113,7 +109,6 @@ export default function TopFirstScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ModalActivityIndicator show={state.screenIsWaiting} />
       <FlatList
         ref={ref}
         data={formatData(state.products_all, numColumns)}
