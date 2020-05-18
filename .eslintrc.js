@@ -12,6 +12,7 @@ module.exports = {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
   },
+  parser: 'babel-eslint',
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -23,6 +24,7 @@ module.exports = {
     'react',
   ],
   rules: {
+    'no-underscore-dangle': 'off',
     // ++ error
     'no-plusplus': 'off',
     // for require and stuff
@@ -30,6 +32,6 @@ module.exports = {
     // console.log stuff
     'no-console': 'off',
     // props validation ignoring for react navigation
-    'react/prop-types': ['error', { ignore: ['navigation'] }],
+    'react/prop-types': ['error', { ignore: ['navigation', 'route'] }],
   },
 };

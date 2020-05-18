@@ -45,7 +45,7 @@ export default function ProductDetailsScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Carousel data={dummyData} internalText={false} />
+      <Carousel data={dummyData} internalText={false} navigation={navigation} />
       <Dot data={dummyData} />
     </View>
   );

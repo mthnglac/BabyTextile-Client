@@ -70,6 +70,7 @@ export default function TopTabNavigator() {
   const funcContext = React.useMemo(
     () => ({
       categorizedProductList: async () => {
+        console.log('helo');
         // initial variables
         let userToken;
 

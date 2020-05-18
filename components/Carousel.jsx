@@ -60,11 +60,14 @@ const styles = StyleSheet.create({
 });
 
 
-// eslint-disable-next-line react/prop-types
-function CarouselItem({ item, internalText }) {
+function CarouselItem({ item, internalText, navigation }) {
   return (
-    <TouchableOpacity style={styles.cardView}>
-      {/* eslint-disable-next-line react/prop-types */}
+    <TouchableOpacity
+      style={styles.cardView}
+      onPress={() => navigation.navigate('ImageModal', {
+        imageURL: item.url,
+      })}
+    >
       <Image style={styles.cardImage} source={{ uri: item.url }} />
       { internalText === true && (
       <View style={styles.cardTextView}>
@@ -75,9 +78,16 @@ function CarouselItem({ item, internalText }) {
     </TouchableOpacity>
   );
 }
+CarouselItem.propTypes = {
+  item: PropTypes.shape({
+    url: PropTypes.string.isRequired,
+  }).isRequired,
+  internalText: PropTypes.bool.isRequired,
+};
+
 
 export default function Carousel(props) {
-  const { data, internalText } = props;
+  const { data, internalText, navigation } = props;
   const scrollX = new Animated.Value(0);
 
   return (
@@ -92,7 +102,9 @@ export default function Carousel(props) {
         scrollEventThrottle={16}
         decelerationRate="fast"
         showsHorizontalScrollIndicator={false}
-        renderItem={({ item }) => <CarouselItem item={item} internalText={internalText} />}
+        renderItem={({ item }) => (
+          <CarouselItem item={item} internalText={internalText} navigation={navigation} />
+        )}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { x: scrollX } } }],
         )}
@@ -100,12 +112,10 @@ export default function Carousel(props) {
     </View>
   );
 }
-
 Carousel.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   internalText: PropTypes.bool,
 };
-
 Carousel.defaultProps = {
   internalText: true,
 };

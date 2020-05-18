@@ -8,16 +8,39 @@ import useCachedResources from './hooks/useCachedResources';
 import LinkingConfiguration from './navigation/LinkingConfiguration';
 import AuthContext from './constants/auth/AuthContext';
 
+import ImageModalScreen from './screens/modals/ImageModalScreen';
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import SignInScreen from './screens/auth/SignInScreen';
-import CartIcon from './components/CartIcon';
 import fetchJSONWebTokens from './constants/fetchAPI/token';
 import checkError from './constants/Exceptions';
 import settings from './constants/fetchAPI/config/base';
 
-
+// initial
 const Stack = createStackNavigator();
-
+const INITIAL_ROUTE_NAME = 'Root';
+const signInScreenInfo = {
+  name: 'SignIn',
+  component: SignInScreen,
+  options: {
+    headerShown: false,
+  },
+};
+const screenInfo = [
+  {
+    name: 'Root',
+    component: BottomTabNavigator,
+    options: {
+      headerShown: false,
+    },
+  },
+  {
+    name: 'ImageModal',
+    component: ImageModalScreen,
+    options: {
+      headerShown: false,
+    },
+  },
+];
 // style sheet
 const white = '#fff';
 const styles = StyleSheet.create({
@@ -27,10 +50,10 @@ const styles = StyleSheet.create({
   },
 });
 
+
 // eslint-disable-next-line no-unused-vars
 export default function App(props) {
   const isLoadingComplete = useCachedResources();
-
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -62,21 +85,6 @@ export default function App(props) {
       userToken: null,
     },
   );
-
-  // Load any resources or data that we need prior to rendering the app
-  React.useEffect(() => {
-    async function bootstrapAsync() {
-      let userToken;
-      try {
-        userToken = await AsyncStorage.getItem('userToken');
-      } catch (e) {
-        console.error(e);
-      }
-      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
-    }
-    bootstrapAsync();
-  }, []);
-
   const authContext = React.useMemo(
     () => ({
       signIn: async (data) => {
@@ -111,6 +119,19 @@ export default function App(props) {
     }),
     [],
   );
+  React.useEffect(() => {
+    async function bootstrapAsync() {
+      let userToken;
+      try {
+        userToken = await AsyncStorage.getItem('userToken');
+      } catch (e) {
+        console.error(e);
+      }
+      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+    }
+    bootstrapAsync();
+  }, []);
+
 
   if (!isLoadingComplete) {
     return null;
@@ -120,25 +141,40 @@ export default function App(props) {
       {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
       <NavigationContainer linking={LinkingConfiguration}>
         <AuthContext.Provider value={authContext}>
-          <Stack.Navigator>
-            {/*{state.userToken == null ? (*/}
-            {/*  <Stack.Screen name="SignIn" component={SignInScreen} options={{ headerShown: false }} />*/}
-            {/*) : (*/}
-            {/*  <Stack.Screen*/}
-            {/*    name="Root"*/}
-            {/*    component={BottomTabNavigator}*/}
-            {/*    options={{*/}
-            {/*      headerShown: false,*/}
-            {/*    }}*/}
-            {/*  />*/}
-            {/*)}*/}
-            <Stack.Screen
-              name="Root"
-              component={BottomTabNavigator}
-              options={{
-                headerShown: false,
-              }}
-            />
+          <Stack.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
+            {/*{*/}
+            {/*  state.userToken == null ? (*/}
+            {/*    <Stack.Screen*/}
+            {/*      name={signInScreenInfo.name}*/}
+            {/*      component={signInScreenInfo.component}*/}
+            {/*      options={{*/}
+            {/*        headerShown: signInScreenInfo.options.headerShown,*/}
+            {/*      }}*/}
+            {/*    />*/}
+            {/*  ) : screenInfo.flatMap((screen, index) => (*/}
+            {/*    <Stack.Screen*/}
+            {/*      name={screen.name}*/}
+            {/*      component={screen.component}*/}
+            {/*      options={{*/}
+            {/*        headerShown: screen.options.headerShown,*/}
+            {/*      }}*/}
+            {/*      key={index}*/}
+            {/*    />*/}
+            {/*  ))*/}
+            {/*}*/}
+
+            {
+              screenInfo.flatMap((screen, index) => (
+                <Stack.Screen
+                  name={screen.name}
+                  component={screen.component}
+                  options={{
+                    headerShown: screen.options.headerShown,
+                  }}
+                  key={index}
+                />
+              ))
+            }
           </Stack.Navigator>
         </AuthContext.Provider>
       </NavigationContainer>
