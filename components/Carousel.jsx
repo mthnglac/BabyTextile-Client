@@ -62,7 +62,12 @@ const styles = StyleSheet.create({
 
 function CarouselItem({ item, internalText, navigation }) {
   return (
-    <TouchableOpacity style={styles.cardView} onPress={() => navigation.navigate('ImageModal')}>
+    <TouchableOpacity
+      style={styles.cardView}
+      onPress={() => navigation.navigate('ImageModal', {
+        imageURL: item.url,
+      })}
+    >
       <Image style={styles.cardImage} source={{ uri: item.url }} />
       { internalText === true && (
       <View style={styles.cardTextView}>
@@ -97,7 +102,9 @@ export default function Carousel(props) {
         scrollEventThrottle={16}
         decelerationRate="fast"
         showsHorizontalScrollIndicator={false}
-        renderItem={({ item }) => <CarouselItem item={item} internalText={internalText} navigation={navigation} />}
+        renderItem={({ item }) => (
+          <CarouselItem item={item} internalText={internalText} navigation={navigation} />
+        )}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { x: scrollX } } }],
         )}
@@ -105,12 +112,10 @@ export default function Carousel(props) {
     </View>
   );
 }
-
 Carousel.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   internalText: PropTypes.bool,
 };
-
 Carousel.defaultProps = {
   internalText: true,
 };

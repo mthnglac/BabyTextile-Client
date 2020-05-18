@@ -3,7 +3,7 @@ import {
   AsyncStorage, Platform, StatusBar, StyleSheet, View,
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import useCachedResources from './hooks/useCachedResources';
 import LinkingConfiguration from './navigation/LinkingConfiguration';
 import AuthContext from './constants/auth/AuthContext';
@@ -54,7 +54,6 @@ const styles = StyleSheet.create({
 // eslint-disable-next-line no-unused-vars
 export default function App(props) {
   const isLoadingComplete = useCachedResources();
-
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -86,20 +85,6 @@ export default function App(props) {
       userToken: null,
     },
   );
-
-  React.useEffect(() => {
-    async function bootstrapAsync() {
-      let userToken;
-      try {
-        userToken = await AsyncStorage.getItem('userToken');
-      } catch (e) {
-        console.error(e);
-      }
-      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
-    }
-    bootstrapAsync();
-  }, []);
-
   const authContext = React.useMemo(
     () => ({
       signIn: async (data) => {
@@ -134,6 +119,19 @@ export default function App(props) {
     }),
     [],
   );
+  React.useEffect(() => {
+    async function bootstrapAsync() {
+      let userToken;
+      try {
+        userToken = await AsyncStorage.getItem('userToken');
+      } catch (e) {
+        console.error(e);
+      }
+      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+    }
+    bootstrapAsync();
+  }, []);
+
 
   if (!isLoadingComplete) {
     return null;
