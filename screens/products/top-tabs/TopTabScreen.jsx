@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
-  Image, SafeAreaView, StyleSheet,
-  TouchableOpacity, View, RefreshControl,
+  Image, SafeAreaView, StyleSheet, TouchableOpacity,
+  View, RefreshControl,
 } from 'react-native';
 import { useScrollToTop } from '@react-navigation/native';
 import { FlatList } from 'react-native-gesture-handler';
@@ -85,7 +85,6 @@ export default function TopFirstScreen({ navigation }) {
       <TouchableOpacity
         key={item.pk}
         style={styles.box}
-        activeOpacity={0.5}
         onPress={() => navigation.navigate('ProductDetails')}
       >
         <Image style={styles.boxImage} source={{ uri: item.image }} />

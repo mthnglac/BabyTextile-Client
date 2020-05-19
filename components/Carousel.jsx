@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {
-  StyleSheet, View, Text, Image, Animated, TouchableOpacity,
+  StyleSheet, View, Text, Image, Animated,
 } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
 
 import CarouselInfoContext from '../constants/products/CarouselInfoContext';
