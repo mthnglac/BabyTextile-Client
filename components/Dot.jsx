@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 
+import CarouselInfoContext from '../constants/products/CarouselInfoContext';
 import { width } from '../constants/Layout';
 
 const grey = '#595959';
@@ -25,8 +26,8 @@ const styles = StyleSheet.create({
 
 export default function Dot(props) {
   const { data } = props;
-  const scrollX = new Animated.Value(0);
-  const position = Animated.divide(scrollX, width);
+  const { state } = React.useContext(CarouselInfoContext);
+  const position = Animated.divide(state.scrollXInfo, width);
 
   return (
     <View style={styles.dotView}>

@@ -1,9 +1,10 @@
 import * as React from 'react';
 import {
-  StyleSheet, View,
+  StyleSheet, View, Animated,
 } from 'react-native';
 import { TransitionPresets } from '@react-navigation/stack';
 
+import CarouselInfoContext from '../../constants/products/CarouselInfoContext';
 import Carousel from '../../components/Carousel';
 import Dot from '../../components/Dot';
 
@@ -43,10 +44,35 @@ export default function ProductDetailsScreen({ navigation }) {
     });
   }, [navigation]);
 
+  const [state, dispatch] = React.useReducer(
+    (prevState, action) => {
+      switch (action.type) {
+        case 'UPDATE_SCROLL':
+          return {
+            ...prevState,
+            scrollXInfo: action.setScrollXInfo,
+          };
+        case 'BLABLABLa':
+          return {
+            ...prevState,
+            scrollXInfo: action.salamanca,
+          };
+        default:
+          return state;
+      }
+    },
+    {
+      scrollXInfo: new Animated.Value(0),
+      salamanca: 0,
+    },
+  );
+
   return (
-    <View style={styles.container}>
-      <Carousel data={dummyData} internalText={false} navigation={navigation} />
-      <Dot data={dummyData} />
-    </View>
+    <CarouselInfoContext.Provider value={{ state, dispatch }}>
+      <View style={styles.container}>
+        <Carousel data={dummyData} internalText={false} navigation={navigation} />
+        <Dot data={dummyData} />
+      </View>
+    </CarouselInfoContext.Provider>
   );
 }
