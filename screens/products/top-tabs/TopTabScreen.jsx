@@ -85,6 +85,7 @@ export default function TopFirstScreen({ navigation }) {
       <TouchableOpacity
         key={item.pk}
         style={styles.box}
+        activeOpacity={0.5}
         onPress={() => navigation.navigate('ProductDetails')}
       >
         <Image style={styles.boxImage} source={{ uri: item.image }} />

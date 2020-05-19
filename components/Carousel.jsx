@@ -77,6 +77,7 @@ function CarouselItem({ item, internalText, navigation }) {
   return (
     <TouchableOpacity
       style={styles.cardView}
+      activeOpacity={0.7}
       onPress={() => navigation.navigate('ImageModal', {
         imageURL: item.url,
       })}
