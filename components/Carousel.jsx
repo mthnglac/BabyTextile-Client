@@ -1,12 +1,14 @@
 import * as React from 'react';
 import {
-  StyleSheet, View, Text, Image, Animated, TouchableOpacity,
+  StyleSheet, View, Text, Image, Animated,
 } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
 
+import CarouselInfoContext from '../constants/products/CarouselInfoContext';
 import { width, height } from '../constants/Layout';
 
+const grey = '#595959';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -57,6 +59,17 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 5,
   },
+  dotView: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  dot: {
+    margin: 8,
+    width: 10,
+    height: 10,
+    backgroundColor: grey,
+    borderRadius: 5,
+  },
 });
 
 
@@ -64,11 +77,12 @@ function CarouselItem({ item, internalText, navigation }) {
   return (
     <TouchableOpacity
       style={styles.cardView}
+      activeOpacity={0.7}
       onPress={() => navigation.navigate('ImageModal', {
-        imageURL: item.url,
+        imageURL: item.image,
       })}
     >
-      <Image style={styles.cardImage} source={{ uri: item.url }} />
+      <Image style={styles.cardImage} source={{ uri: item.image }} />
       { internalText === true && (
       <View style={styles.cardTextView}>
         <Text style={styles.cardTextTitle}>Title</Text>
@@ -80,7 +94,7 @@ function CarouselItem({ item, internalText, navigation }) {
 }
 CarouselItem.propTypes = {
   item: PropTypes.shape({
-    url: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
   }).isRequired,
   internalText: PropTypes.bool.isRequired,
 };
@@ -88,7 +102,7 @@ CarouselItem.propTypes = {
 
 export default function Carousel(props) {
   const { data, internalText, navigation } = props;
-  const scrollX = new Animated.Value(0);
+  const { state, dispatch } = React.useContext(CarouselInfoContext);
 
   return (
     <View style={styles.container}>
@@ -103,10 +117,19 @@ export default function Carousel(props) {
         decelerationRate="fast"
         showsHorizontalScrollIndicator={false}
         renderItem={({ item }) => (
-          <CarouselItem item={item} internalText={internalText} navigation={navigation} />
+          <CarouselItem
+            item={item}
+            internalText={internalText}
+            navigation={navigation}
+          />
         )}
         onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+          [{ nativeEvent: { contentOffset: { x: state.scrollXInfo } } }],
+          {
+            listener: (event) => {
+              dispatch({ type: 'UPDATE_SCROLL', setScrollXInfo: event.nativeEvent.contentOffset.x });
+            },
+          },
         )}
       />
     </View>
