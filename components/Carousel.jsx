@@ -79,10 +79,10 @@ function CarouselItem({ item, internalText, navigation }) {
       style={styles.cardView}
       activeOpacity={0.7}
       onPress={() => navigation.navigate('ImageModal', {
-        imageURL: item.url,
+        imageURL: item.image,
       })}
     >
-      <Image style={styles.cardImage} source={{ uri: item.url }} />
+      <Image style={styles.cardImage} source={{ uri: item.image }} />
       { internalText === true && (
       <View style={styles.cardTextView}>
         <Text style={styles.cardTextTitle}>Title</Text>
@@ -94,7 +94,7 @@ function CarouselItem({ item, internalText, navigation }) {
 }
 CarouselItem.propTypes = {
   item: PropTypes.shape({
-    url: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
   }).isRequired,
   internalText: PropTypes.bool.isRequired,
 };
@@ -117,7 +117,11 @@ export default function Carousel(props) {
         decelerationRate="fast"
         showsHorizontalScrollIndicator={false}
         renderItem={({ item }) => (
-          <CarouselItem item={item} internalText={internalText} navigation={navigation} />
+          <CarouselItem
+            item={item}
+            internalText={internalText}
+            navigation={navigation}
+          />
         )}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { x: state.scrollXInfo } } }],

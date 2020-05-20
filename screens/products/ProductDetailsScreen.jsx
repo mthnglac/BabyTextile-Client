@@ -8,26 +8,6 @@ import CarouselInfoContext from '../../constants/products/CarouselInfoContext';
 import Carousel from '../../components/Carousel';
 import Dot from '../../components/Dot';
 
-const dummyData = [
-  {
-    title: 'Anise Aroma Art Bazar',
-    url: 'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg',
-    description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-    id: 1,
-  },
-  {
-    title: 'Food inside a Bowl',
-    url: 'https://i.ibb.co/JtS24qP/food-inside-bowl-1854037.jpg',
-    description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-    id: 2,
-  },
-  {
-    title: 'Vegatable Salad',
-    url: 'https://i.ibb.co/JxykVBt/flat-lay-photography-of-vegetable-salad-on-plate-1640777.jpg',
-    description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-    id: 3,
-  },
-];
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -37,7 +17,7 @@ const styles = StyleSheet.create({
 });
 
 
-export default function ProductDetailsScreen({ navigation }) {
+export default function ProductDetailsScreen({ navigation, route }) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       ...TransitionPresets.ModalPresentationIOS,
@@ -52,26 +32,24 @@ export default function ProductDetailsScreen({ navigation }) {
             ...prevState,
             scrollXInfo: action.setScrollXInfo,
           };
-        case 'BLABLABLa':
-          return {
-            ...prevState,
-            scrollXInfo: action.salamanca,
-          };
         default:
           return state;
       }
     },
     {
       scrollXInfo: new Animated.Value(0),
-      salamanca: 0,
     },
   );
 
   return (
     <CarouselInfoContext.Provider value={{ state, dispatch }}>
       <View style={styles.container}>
-        <Carousel data={dummyData} internalText={false} navigation={navigation} />
-        <Dot data={dummyData} />
+        <Carousel
+          data={route.params?.productImageURL}
+          internalText={false}
+          navigation={navigation}
+        />
+        <Dot data={route.params?.productImageURL} />
       </View>
     </CarouselInfoContext.Provider>
   );

@@ -1,15 +1,15 @@
 import * as React from 'react';
 import {
   Image, SafeAreaView, StyleSheet, TouchableOpacity,
-  View, RefreshControl,
+  View, RefreshControl, AsyncStorage,
 } from 'react-native';
 import { useScrollToTop } from '@react-navigation/native';
 import { FlatList } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
 
-import FuncContext from '../../../constants/products/FuncContext';
-import StateContext from '../../../constants/products/StateContext';
 import { width } from '../../../constants/Layout';
+import { fetchAllProductsByCategory } from '../../../constants/fetchAPI/product';
+import settings from '../../../constants/fetchAPI/config/base';
 
 const pink = 'pink';
 const brown = '#4D243D';
@@ -38,26 +38,69 @@ const styles = StyleSheet.create({
 });
 
 
-export default function TopFirstScreen({ navigation }) {
-  const { categorizedProductList } = React.useContext(FuncContext);
-  const { state, dispatch } = React.useContext(StateContext);
+async function getAllProductsByCategory(categoryName) {
+  console.log('helo');
+  // initial variables
+  let userToken;
+
+  // get token
+  try {
+    userToken = await AsyncStorage.getItem('accessToken');
+  } catch (e) {
+    console.error(e);
+  }
+
+  // get & return products
+  return fetchAllProductsByCategory(
+    `${settings.prefix}://${settings.domain}`,
+    categoryName,
+    userToken,
+  );
+}
+
+export default function TopFirstScreen({ navigation, route }) {
+  const [state, dispatch] = React.useReducer(
+    (prevState, action) => {
+      switch (action.type) {
+        case 'PRODUCTS':
+          return {
+            ...prevState,
+            productsAllByCategory: action.products,
+          };
+        case 'REFRESH':
+          return {
+            ...prevState,
+            refreshing: action.isRefresh,
+          };
+        case 'INDICATOR':
+          return {
+            ...prevState,
+            screenIsWaiting: action.isFinished,
+          };
+        default:
+          return state;
+      }
+    },
+    {
+      productsAllByCategory: [],
+      screenIsWaiting: false,
+      refreshing: false,
+    },
+  );
   const ref = React.useRef(null);
 
-  React.useEffect(
-    () => {
-      async function loadDataAsync() {
-        const responseJSON = await categorizedProductList();
-        dispatch({ type: 'PRODUCTS', products: responseJSON });
-      }
-      loadDataAsync();
-    },
-    [],
-  );
+  React.useEffect(() => {
+    async function loadDataAsync() {
+      const responseJSON = await getAllProductsByCategory(route.name);
+      dispatch({ type: 'PRODUCTS', products: responseJSON });
+    }
+    loadDataAsync();
+  }, []);
 
   const onRefresh = React.useCallback(
     async () => {
       dispatch({ type: 'REFRESH', isRefresh: true });
-      const responseJSON = await categorizedProductList();
+      const responseJSON = await getAllProductsByCategory(route.name);
       dispatch({ type: 'PRODUCTS', products: responseJSON });
       dispatch({ type: 'REFRESH', isRefresh: false });
     },
@@ -85,16 +128,19 @@ export default function TopFirstScreen({ navigation }) {
       <TouchableOpacity
         key={item.pk}
         style={styles.box}
-        onPress={() => navigation.navigate('ProductDetails')}
+        onPress={() => navigation.navigate('ProductDetails', {
+          productImageURL: item.productimage_set,
+        })}
       >
-        <Image style={styles.boxImage} source={{ uri: item.image }} />
+        <Image style={styles.boxImage} source={{ uri: item.productimage_set[0].image }} />
       </TouchableOpacity>
     );
   }
   renderItemFunc.propTypes = {
     item: PropTypes.shape({
       pk: PropTypes.number,
-      image: PropTypes.string,
+      product: PropTypes.string,
+      productimage_set: PropTypes.string,
       empty: PropTypes.bool,
     }),
   };
@@ -111,11 +157,11 @@ export default function TopFirstScreen({ navigation }) {
     <SafeAreaView style={styles.container}>
       <FlatList
         ref={ref}
-        data={formatData(state.products_all, numColumns)}
+        data={formatData(state.productsAllByCategory, numColumns)}
         renderItem={renderItemFunc}
         numColumns={numColumns}
         keyExtractor={keyExtractorFunc}
-        extraData={state.products_all}
+        extraData={state.productsAllByCategory}
         refreshControl={(
           <RefreshControl
             onRefresh={onRefresh}
