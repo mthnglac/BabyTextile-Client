@@ -45,11 +45,11 @@ export default function ProductDetailsScreen({ navigation, route }) {
     <CarouselInfoContext.Provider value={{ state, dispatch }}>
       <View style={styles.container}>
         <Carousel
-          data={route.params?.productImageURL}
+          data={route.params?.product?.productimage_set}
           internalText={false}
           navigation={navigation}
         />
-        <Dot data={route.params?.productImageURL} />
+        <Dot data={route.params?.product?.productimage_set} />
       </View>
     </CarouselInfoContext.Provider>
   );
