@@ -22,8 +22,13 @@ module.exports = {
   },
   plugins: [
     'react',
+    'react-hooks',
   ],
   rules: {
+    // hooks
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
+    // underscore
     'no-underscore-dangle': 'off',
     // ++ error
     'no-plusplus': 'off',
@@ -33,5 +38,7 @@ module.exports = {
     'no-console': 'off',
     // props validation ignoring for react navigation
     'react/prop-types': ['error', { ignore: ['navigation', 'route'] }],
+    // camelcase
+    camelcase: 'off',
   },
 };

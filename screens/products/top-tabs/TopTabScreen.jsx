@@ -59,6 +59,7 @@ async function getAllProductsByCategory(categoryName) {
 }
 
 export default function TopFirstScreen({ navigation, route }) {
+  const ref = React.useRef(null);
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -87,7 +88,6 @@ export default function TopFirstScreen({ navigation, route }) {
       refreshing: false,
     },
   );
-  const ref = React.useRef(null);
 
   React.useEffect(() => {
     async function loadDataAsync() {
@@ -95,7 +95,7 @@ export default function TopFirstScreen({ navigation, route }) {
       dispatch({ type: 'PRODUCTS', products: responseJSON });
     }
     loadDataAsync();
-  }, []);
+  }, [route.name]);
 
   const onRefresh = React.useCallback(
     async () => {
@@ -129,7 +129,7 @@ export default function TopFirstScreen({ navigation, route }) {
         key={item.pk}
         style={styles.box}
         onPress={() => navigation.navigate('ProductDetails', {
-          productImageURL: item.productimage_set,
+          product: item,
         })}
       >
         <Image style={styles.boxImage} source={{ uri: item.productimage_set[0].image }} />
