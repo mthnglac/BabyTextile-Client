@@ -12,13 +12,12 @@ import { width } from '../constants/Layout';
 const grey = '#595959';
 const styles = StyleSheet.create({
   dotView: {
-    flex: 1,
     flexDirection: 'row',
   },
   dot: {
     margin: 8,
-    width: 10,
-    height: 10,
+    width: 7,
+    height: 7,
     backgroundColor: grey,
     borderRadius: 5,
   },

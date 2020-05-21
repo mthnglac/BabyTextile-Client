@@ -14,6 +14,7 @@
   "dependencies": {
     "@expo/vector-icons": "~10.2.0",
     "@react-native-community/masked-view": "0.1.10",
+    "@react-native-community/segmented-control": "^1.6.1",
     "@react-navigation/bottom-tabs": "^5.3.1",
     "@react-navigation/material-bottom-tabs": "^5.2.2",
     "@react-navigation/material-top-tabs": "^5.2.2",
@@ -48,7 +49,7 @@
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.19.0",
-    "eslint-plugin-react-hooks": "^4.0.1",
+    "eslint-plugin-react-hooks": "^4.0.2",
     "jest-expo": "~37.0.0"
   },
   "private": true
