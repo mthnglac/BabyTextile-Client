@@ -1,9 +1,8 @@
 import * as React from 'react';
 import {
-  StyleSheet, View, Animated, Text, Button,
+  StyleSheet, View, Animated, Text,
 } from 'react-native';
 import { BorderlessButton, RectButton } from 'react-native-gesture-handler';
-import SegmentedControl from '@react-native-community/segmented-control';
 
 import CarouselInfoContext from '../../constants/products/CarouselInfoContext';
 import Carousel from '../../components/Carousel';
