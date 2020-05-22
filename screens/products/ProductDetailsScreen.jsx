@@ -1,17 +1,49 @@
 import * as React from 'react';
 import {
-  StyleSheet, View, Animated, Text, Image, Button,
+  StyleSheet, View, Animated, Text, Button,
 } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { BorderlessButton, RectButton } from 'react-native-gesture-handler';
 import SegmentedControl from '@react-native-community/segmented-control';
 
 import CarouselInfoContext from '../../constants/products/CarouselInfoContext';
 import Carousel from '../../components/Carousel';
 import Dot from '../../components/Dot';
+import RadioButton from '../../components/RadioButton';
+import ButtonGroup from '../../components/ButtonGroup';
 
+const tomato = '#FE6C6B';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
+  qtyButton: {
+    width: 40,
+    height: 40,
+  },
+  qtyButtonBorders: {
+    borderColor: '#EAEAEA',
+    borderWidth: 2,
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+  },
+  qtyButtonText: {
+    color: 'black',
+    fontSize: 15,
+    fontWeight: 'bold',
+    backgroundColor: 'transparent',
+  },
+  rectButton: {
+    flex: 1,
+    height: 60,
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    backgroundColor: tomato,
   },
 });
 
@@ -24,6 +56,8 @@ export default function ProductDetailsScreen({ navigation, route }) {
     });
   }, [navigation]);
 
+  const colors = ['#f1c40f', '#3498db', '#c0392b'];
+  const sizes = ['S', 'M', 'L', 'XL'];
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -32,10 +66,15 @@ export default function ProductDetailsScreen({ navigation, route }) {
             ...prevState,
             scrollXInfo: action.setScrollXInfo,
           };
-        case 'SELECTED':
+        case 'SIZE_SELECTED':
           return {
             ...prevState,
-            buttonGroupIndex: action.setButtonGroupIndex,
+            sizeSelectedIndex: action.setSizeSelectedIndex,
+          };
+        case 'COLOR_SELECTED':
+          return {
+            ...prevState,
+            colorSelectedIndex: action.setColorSelectedIndex,
           };
         default:
           return state;
@@ -43,110 +82,101 @@ export default function ProductDetailsScreen({ navigation, route }) {
     },
     {
       scrollXInfo: new Animated.Value(0),
-      buttonGroupIndex: 0,
+      colorSelectedIndex: null,
+      sizeSelectedIndex: null,
     },
   );
 
   return (
     <CarouselInfoContext.Provider value={{ state, dispatch }}>
       <View style={styles.container}>
-        <View style={{ flex: 1, alignItems: 'center', backgroundColor: 'blue' }}>
+        <View style={{ flex: 1, alignItems: 'center' }}>
           <Carousel
             data={route.params?.product?.productimage_set}
-            internalText={false}
             navigation={navigation}
+            internalText={false}
+            internalDot={false}
           />
         </View>
-        <View style={{ flex: 1, backgroundColor: 'pink' }}>
+        <View style={{ flex: 1 }}>
           {/* DOT */}
-          <View style={{ flex: 0.2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: 'peru', marginHorizontal: 5 }}>
+          <View style={{ flex: 0.2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}>
             <Dot data={route.params?.product?.productimage_set} />
           </View>
-          {/* Title */}
-          <View style={{ flex: 1, backgroundColor: 'darkmagenta' }}>
-            <View style={{ flex: 2, flexDirection: 'row', alignItems: 'center', backgroundColor: 'pink', marginHorizontal: 5 }}>
-              <View style={{ flex: 1, backgroundColor: 'red', marginHorizontal: 10 }}>
-                <Text>Thamis Chair</Text>
-              </View>
-              <View style={{ flex: 1, backgroundColor: 'red', marginHorizontal: 10 }}>
-                <Text style={{ alignSelf: 'flex-end' }}>$ 125</Text>
-              </View>
-            </View>
-          </View>
           {/* Description */}
-          <View style={{ flex: 1, backgroundColor: 'green' }}>
-            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: 'aquamarine', marginHorizontal: 5 }}>
-              <View style={{ flex: 1, backgroundColor: 'red', marginHorizontal: 10 }}>
-                <Text>
-                  @ Urun kodu: 15613 @ Fiyat: 49.90$, @ Iki iplik kumas cepli elbise
-                  @ Bedenler: (S/M)-(L/XL)-(XXL-XXXXL)
-                  @ siparis ve bilgi icin WhatsApp
-                </Text>
-              </View>
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', marginHorizontal: 5 }}>
+            <View style={{ flex: 1, marginHorizontal: 10 }}>
+              <Text>
+                @ Urun kodu: 15613 @ Fiyat: 49.90$, @ Iki iplik kumas cepli elbise
+                @ Bedenler: (S/M)-(L/XL)-(XXL-XXXXL)
+                @ siparis ve bilgi icin WhatsApp
+              </Text>
             </View>
           </View>
           {/* Color and Qty */}
-          <View style={{ flex: 1, backgroundColor: 'greenyellow' }}>
-            <View style={{ flex: 1, flexDirection: 'row', marginHorizontal: 5 }}>
-              {/* Color ScrollView */}
-              <ScrollView
-                contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'peru' }}
-                showHorizontalScrollIndicator={false}
-                horizontal
-              >
-                <View style={{ flex: 1, width: 20, height: 20, borderRadius: 12, overflow: 'hidden', marginHorizontal: 10, backgroundColor: 'red' }}>
-                  <Image />
-                  <Text>SI</Text>
-                </View>
-                <View style={{ flex: 1, width: 20, height: 20, borderRadius: 12, overflow: 'hidden', marginHorizontal: 10, backgroundColor: 'red' }}>
-                  <Image />
-                  <Text>SI</Text>
-                </View>
-                <View style={{ flex: 1, width: 20, height: 20, borderRadius: 12, overflow: 'hidden', marginHorizontal: 10, backgroundColor: 'red' }}>
-                  <Image />
-                  <Text>SI</Text>
-                </View>
-              </ScrollView>
-              {/* Qty */}
-              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: 'purple' }}>
-                <View style={{ marginHorizontal: 10 }}>
-                  <Button title="-" onPress={() => alert('selam')} />
-                </View>
-                <View>
-                  <Text>2</Text>
-                </View>
-                <View style={{ marginHorizontal: 10 }}>
-                  <Button title="+" onPress={() => alert('selam')} />
-                </View>
+          <View style={{ flex: 0.7, flexDirection: 'row', marginHorizontal: 5 }}>
+            {/* Color Radio Button */}
+            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+              {colors.flatMap((color, index) => (
+                <RadioButton
+                  key={index}
+                  selectedIndex={index}
+                  activeBorderColor={color}
+                  circleBackgroundColor={color}
+                  selected={state.colorSelectedIndex === index}
+                />
+              ))}
+            </View>
+            {/* Qty */}
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+              <View style={{ marginHorizontal: 15 }}>
+                <BorderlessButton
+                  style={styles.qtyButton}
+                  rippleColor="#EAEAEA"
+                  onPress={() => alert('selam')}
+                >
+                  <View style={styles.qtyButtonBorders}>
+                    <Text style={styles.qtyButtonText}>-</Text>
+                  </View>
+                </BorderlessButton>
+              </View>
+              <View>
+                <Text style={{ fontWeight: 'bold', fontSize: 15 }}>2</Text>
+              </View>
+              <View style={{ marginHorizontal: 15 }}>
+                <BorderlessButton
+                  style={styles.qtyButton}
+                  rippleColor="#EAEAEA"
+                  onPress={() => alert('selam')}
+                >
+                  <View style={styles.qtyButtonBorders}>
+                    <Text style={styles.qtyButtonText}>+</Text>
+                  </View>
+                </BorderlessButton>
               </View>
             </View>
           </View>
           {/* Size Button Group */}
-          <View style={{ flex: 1, backgroundColor: 'tomato' }}>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5, backgroundColor: 'purple' }}>
-              <SegmentedControl
-                values={['One', 'Two', 'Three']}
-                selectedIndex={state.buttonGroupIndex}
-                textColor="red"
-                tintColor="blue"
-                activeTextColor="black"
-                backgroundColor="turquoise"
-                style={{ marginHorizontal: 10 }}
-                onChange={(event) => {
-                  dispatch({ type: 'SELECTED', setButtonGroupIndex: event.nativeEvent.selectedSegmentIndex });
-                }}
-              />
+          <View style={{ flex: 0.7, marginHorizontal: 5 }}>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+              {sizes.flatMap((size, index) => (
+                <ButtonGroup
+                  key={index}
+                  size={size}
+                  selectedIndex={index}
+                  selected={state.sizeSelectedIndex === index}
+                />
+              ))}
             </View>
           </View>
-          {/* Like & Add to Cart Button */}
-          <View style={{ flex: 1, backgroundColor: 'mediumpurple' }}>
-            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', marginHorizontal: 5, backgroundColor: 'aquamarine' }}>
-              <View style={{ flex: 1, marginHorizontal: 10 }}>
-                <Button title="Galp" onPress={() => alert('selam')} />
-              </View>
-              <View style={{ flex: 3, marginHorizontal: 10 }}>
-                <Button title="Add to Cart" onPress={() => alert('selam')} />
-              </View>
+          {/* Add to Cart Button */}
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', marginHorizontal: 5 }}>
+            <View style={{ flex: 1, margin: 10 }}>
+              <RectButton rippleColor="#EAEAEA" style={styles.rectButton} onPress={() => alert('selam')}>
+                <View accessible>
+                  <Text style={{ fontWeight: 'bold', fontSize: 20, color: '#FFFFFF' }}>Karta Ekle</Text>
+                </View>
+              </RectButton>
             </View>
           </View>
         </View>

@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 
 import CarouselInfoContext from '../constants/products/CarouselInfoContext';
 import { width, height } from '../constants/Layout';
+import Dot from './Dot';
 
 const grey = '#595959';
 const styles = StyleSheet.create({
@@ -32,6 +33,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     ...StyleSheet.absoluteFillObject,
     borderRadius: 10,
+    // borderBottomLeftRadius: 40,
   },
   cardTextView: {
     margin: 10,
@@ -101,7 +103,7 @@ CarouselItem.propTypes = {
 
 
 export default function Carousel(props) {
-  const { data, internalText, navigation } = props;
+  const { data, internalText, internalDot, navigation } = props;
   const { state, dispatch } = React.useContext(CarouselInfoContext);
 
   return (
@@ -132,13 +134,21 @@ export default function Carousel(props) {
           },
         )}
       />
+      {internalDot === true && (
+        // DOT
+        <View style={{ margin: 10, position: 'absolute', left: 5, bottom: 10, backgroundColor: 'peru' }}>
+          <Dot data={data} />
+        </View>
+      )}
     </View>
   );
 }
 Carousel.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   internalText: PropTypes.bool,
+  internalDot: PropTypes.bool,
 };
 Carousel.defaultProps = {
   internalText: true,
+  internalDot: true,
 };
