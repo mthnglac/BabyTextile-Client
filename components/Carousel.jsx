@@ -2,7 +2,7 @@ import * as React from 'react';
 import {
   StyleSheet, View, Text, Image, Animated,
 } from 'react-native';
-import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
+import { FlatList, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
 
 import CarouselInfoContext from '../constants/products/CarouselInfoContext';
@@ -77,9 +77,8 @@ const styles = StyleSheet.create({
 
 function CarouselItem({ item, internalText, navigation }) {
   return (
-    <TouchableOpacity
+    <TouchableWithoutFeedback
       style={styles.cardView}
-      activeOpacity={0.7}
       onPress={() => navigation.navigate('ImageModal', {
         imageURL: item.image,
       })}
@@ -91,7 +90,7 @@ function CarouselItem({ item, internalText, navigation }) {
         <Text style={styles.cardTextDescription}>Description</Text>
       </View>
       )}
-    </TouchableOpacity>
+    </TouchableWithoutFeedback>
   );
 }
 CarouselItem.propTypes = {

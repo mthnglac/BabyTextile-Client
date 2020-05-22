@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
 
 import CarouselInfoContext from '../constants/products/CarouselInfoContext';
 
 const white = '#FFFFFF';
+const black = '#000000';
 const grey = '#EAEAEA';
 const tomato = '#FE6C6B';
 const styles = StyleSheet.create({
@@ -18,13 +19,19 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     backgroundColor: white,
   },
-  selectedRectangle: {
+  innerRectangle: {
     height: 44,
     width: 44,
     borderRadius: 11,
-    borderColor: '#EAEAEA',
+    borderColor: grey,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  shadow: {
+    shadowColor: black,
+    shadowOpacity: 1,
+    shadowRadius: 20,
+    elevation: 20,
   },
 });
 
@@ -39,20 +46,20 @@ export default function ButtonGroup(props) {
   } = props;
 
   return (
-    <TouchableOpacity
-      style={styles.rectangle}
+    <TouchableWithoutFeedback
+      style={[styles.rectangle, selected && styles.shadow]}
       onPress={() => {
         dispatch({ type: 'SIZE_SELECTED', setSizeSelectedIndex: selectedIndex });
       }}
     >
-      <View style={[styles.selectedRectangle, {
+      <View style={[styles.innerRectangle, {
         borderWidth: selected ? 0 : 2,
         backgroundColor: selected ? activeColor : white,
       }]}
       >
         <Text style={{ fontWeight: 'bold', fontSize: 18, color: selected ? white : grey }}>{size}</Text>
       </View>
-    </TouchableOpacity>
+    </TouchableWithoutFeedback>
   );
 }
 
