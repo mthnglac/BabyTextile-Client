@@ -23,11 +23,6 @@ const styles = StyleSheet.create({
     width: width - 20,
     height: height / 3,
     borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0.5, height: 0.5 },
-    shadowOpacity: 0.5,
-    shadowRadius: 3,
-    elevation: 5,
   },
   cardImage: {
     resizeMode: 'cover',
@@ -75,10 +70,23 @@ const styles = StyleSheet.create({
 });
 
 
-function CarouselItem({ item, internalText, navigation }) {
+function CarouselItem(props) {
+  const {
+    item,
+    internalText,
+    cardShadow,
+    navigation,
+  } = props;
+
   return (
     <TouchableWithoutFeedback
-      style={styles.cardView}
+      style={[styles.cardView, cardShadow && {
+        shadowColor: '#000',
+        shadowOffset: { width: 0.5, height: 0.5 },
+        shadowOpacity: 0.5,
+        shadowRadius: 3,
+        elevation: 5,
+      }]}
       onPress={() => navigation.navigate('ImageModal', {
         imageURL: item.image,
       })}
@@ -98,11 +106,19 @@ CarouselItem.propTypes = {
     image: PropTypes.string.isRequired,
   }).isRequired,
   internalText: PropTypes.bool.isRequired,
+  cardShadow: PropTypes.bool.isRequired,
 };
 
 
 export default function Carousel(props) {
-  const { data, internalText, internalDot, navigation } = props;
+  const {
+    data,
+    internalText,
+    internalDot,
+    internalDotColor,
+    cardShadow,
+    navigation,
+  } = props;
   const { state, dispatch } = React.useContext(CarouselInfoContext);
 
   return (
@@ -121,6 +137,7 @@ export default function Carousel(props) {
           <CarouselItem
             item={item}
             internalText={internalText}
+            cardShadow={cardShadow}
             navigation={navigation}
           />
         )}
@@ -135,8 +152,8 @@ export default function Carousel(props) {
       />
       {internalDot === true && (
         // DOT
-        <View style={{ margin: 10, position: 'absolute', left: 5, bottom: 10, backgroundColor: 'peru' }}>
-          <Dot data={data} />
+        <View style={{ margin: 10, ...StyleSheet.absoluteFillObject, justifyContent: 'flex-end', alignItems: 'center' }}>
+          <Dot data={data} color={internalDotColor} />
         </View>
       )}
     </View>
@@ -146,8 +163,12 @@ Carousel.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   internalText: PropTypes.bool,
   internalDot: PropTypes.bool,
+  internalDotColor: PropTypes.string,
+  cardShadow: PropTypes.bool,
 };
 Carousel.defaultProps = {
   internalText: true,
   internalDot: true,
+  internalDotColor: grey,
+  cardShadow: true,
 };

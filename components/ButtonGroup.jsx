@@ -3,8 +3,6 @@ import { View, StyleSheet, Text } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
 
-import CarouselInfoContext from '../constants/products/CarouselInfoContext';
-
 const white = '#FFFFFF';
 const black = '#000000';
 const grey = '#EAEAEA';
@@ -16,7 +14,6 @@ const styles = StyleSheet.create({
     borderRadius: 11,
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 8,
     backgroundColor: white,
   },
   innerRectangle: {
@@ -37,19 +34,25 @@ const styles = StyleSheet.create({
 
 
 export default function ButtonGroup(props) {
-  const { dispatch } = React.useContext(CarouselInfoContext);
   const {
     size,
     selected,
     selectedIndex,
+    firstChild,
     activeColor,
+    dispatch,
   } = props;
 
   return (
     <TouchableWithoutFeedback
-      style={[styles.rectangle, selected && styles.shadow]}
+      style={[styles.rectangle, selected && styles.shadow,
+        firstChild ? { marginHorizontal: 10 } : { marginHorizontal: 10 }]}
       onPress={() => {
-        dispatch({ type: 'SIZE_SELECTED', setSizeSelectedIndex: selectedIndex });
+        dispatch({
+          type: 'SIZE_SELECTED',
+          setSizeIndex: selectedIndex,
+          setSizeValue: size,
+        });
       }}
     >
       <View style={[styles.innerRectangle, {
@@ -65,9 +68,11 @@ export default function ButtonGroup(props) {
 
 ButtonGroup.propTypes = {
   size: PropTypes.string.isRequired,
+  firstChild: PropTypes.bool.isRequired,
   selected: PropTypes.bool.isRequired,
   selectedIndex: PropTypes.number.isRequired,
   activeColor: PropTypes.string,
+  dispatch: PropTypes.func.isRequired,
 };
 ButtonGroup.defaultProps = {
   activeColor: tomato,

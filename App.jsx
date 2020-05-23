@@ -9,6 +9,7 @@ import LinkingConfiguration from './navigation/LinkingConfiguration';
 import AuthContext from './constants/auth/AuthContext';
 
 import ImageModalScreen from './screens/modals/ImageModalScreen';
+import SizeModalScreen from './screens/modals/SizeModalScreen';
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import SignInScreen from './screens/auth/SignInScreen';
 import fetchJSONWebTokens from './constants/fetchAPI/token';
@@ -36,6 +37,13 @@ const screenInfo = [
   {
     name: 'ImageModal',
     component: ImageModalScreen,
+    options: {
+      headerShown: false,
+    },
+  },
+  {
+    name: 'SizeModal',
+    component: SizeModalScreen,
     options: {
       headerShown: false,
     },

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
 
 import CarouselInfoContext from '../constants/products/CarouselInfoContext';
@@ -33,18 +33,18 @@ export default function RadioButton(props) {
   } = props;
 
   return (
-    <TouchableOpacity
+    <TouchableWithoutFeedback
       style={[styles.circle, {
         borderColor: selected ? activeBorderColor : '#EAEAEA',
         backgroundColor: selected ? activeBackgroundColor : '#FFFFFF',
         borderWidth: selected ? 2 : 1,
       }]}
       onPress={() => {
-        dispatch({ type: 'COLOR_SELECTED', setColorSelectedIndex: selectedIndex });
+        dispatch({ type: 'COLOR_SELECTED', setColorIndex: selectedIndex });
       }}
     >
       <View style={[styles.selectedCircle, { backgroundColor: circleBackgroundColor }]} />
-    </TouchableOpacity>
+    </TouchableWithoutFeedback>
   );
 }
 

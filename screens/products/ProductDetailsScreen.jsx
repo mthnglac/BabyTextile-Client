@@ -4,24 +4,28 @@ import {
 } from 'react-native';
 import { BorderlessButton, RectButton } from 'react-native-gesture-handler';
 
-import CarouselInfoContext from '../../constants/products/CarouselInfoContext';
+import { SimpleLineIcons } from '@expo/vector-icons';
 import Carousel from '../../components/Carousel';
-import Dot from '../../components/Dot';
 import RadioButton from '../../components/RadioButton';
-import ButtonGroup from '../../components/ButtonGroup';
+import CarouselInfoContext from '../../constants/products/CarouselInfoContext';
 
+const white = '#FFFFFF';
+const red = '#c0392b';
+const blue = '#3498db';
+const yellow = '#f1c40f';
+const grey = '#EAEAEA';
 const tomato = '#FE6C6B';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'grey',
   },
   qtyButton: {
     width: 40,
     height: 40,
   },
   qtyButtonBorders: {
-    borderColor: '#EAEAEA',
+    borderColor: grey,
     borderWidth: 2,
     width: 40,
     height: 40,
@@ -35,14 +39,24 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     backgroundColor: 'transparent',
   },
-  rectButton: {
+  rectPickSizeButton: {
     flex: 1,
     height: 60,
     padding: 10,
+    borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    backgroundColor: tomato,
+    backgroundColor: blue,
+  },
+  rectAddToCartButton: {
+    flex: 1,
+    height: 60,
+    padding: 10,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
   },
 });
 
@@ -55,8 +69,7 @@ export default function ProductDetailsScreen({ navigation, route }) {
     });
   }, [navigation]);
 
-  const colors = ['#f1c40f', '#3498db', '#c0392b'];
-  const sizes = ['S', 'M', 'L', 'XL'];
+  const colors = [yellow, blue, red];
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -65,15 +78,27 @@ export default function ProductDetailsScreen({ navigation, route }) {
             ...prevState,
             scrollXInfo: action.setScrollXInfo,
           };
-        case 'SIZE_SELECTED':
-          return {
-            ...prevState,
-            sizeSelectedIndex: action.setSizeSelectedIndex,
-          };
         case 'COLOR_SELECTED':
           return {
             ...prevState,
-            colorSelectedIndex: action.setColorSelectedIndex,
+            colorSelectedIndex: action.setColorIndex,
+          };
+        case 'QTY_INCREMENT':
+          return {
+            ...prevState,
+            qty: prevState.qty < 5 ? prevState.qty + 1 : prevState.qty,
+          };
+        case 'QTY_DECREMENT':
+          return {
+            ...prevState,
+            qty: prevState.qty > 1 ? prevState.qty - 1 : prevState.qty,
+          };
+        case 'SIZE_SELECTED':
+          return {
+            ...prevState,
+            sizeSelected: action.setSizeSelected,
+            sizeSelectedValue: action.setSizeValue,
+            sizeSelectedIndex: action.setSizeIndex,
           };
         default:
           return state;
@@ -81,8 +106,11 @@ export default function ProductDetailsScreen({ navigation, route }) {
     },
     {
       scrollXInfo: new Animated.Value(0),
-      colorSelectedIndex: null,
+      colorSelectedIndex: 0,
+      sizeSelected: false,
+      sizeSelectedValue: null,
       sizeSelectedIndex: null,
+      qty: 1,
     },
   );
 
@@ -94,28 +122,24 @@ export default function ProductDetailsScreen({ navigation, route }) {
             data={route.params?.product?.productimage_set}
             navigation={navigation}
             internalText={false}
-            internalDot={false}
+            internalDot
+            internalDotColor={white}
+            cardShadow={false}
           />
         </View>
-        <View style={{ flex: 1 }}>
-          {/* DOT */}
-          <View style={{ flex: 0.2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginHorizontal: 5 }}>
-            <Dot data={route.params?.product?.productimage_set} />
-          </View>
+        <View style={{ flex: 0.8, backgroundColor: '#FFFFFF', borderTopLeftRadius: 40, borderTopRightRadius: 40 }}>
           {/* Description */}
-          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', marginHorizontal: 5 }}>
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', marginHorizontal: 15 }}>
             <View style={{ flex: 1, marginHorizontal: 10 }}>
               <Text>
                 @ Urun kodu: 15613 @ Fiyat: 49.90$, @ Iki iplik kumas cepli elbise
-                @ Bedenler: (S/M)-(L/XL)-(XXL-XXXXL)
-                @ siparis ve bilgi icin WhatsApp
               </Text>
             </View>
           </View>
           {/* Color and Qty */}
-          <View style={{ flex: 0.7, flexDirection: 'row', marginHorizontal: 5 }}>
+          <View style={{ flex: 0.7, flexDirection: 'row', marginHorizontal: 15 }}>
             {/* Color Radio Button */}
-            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
               {colors.flatMap((color, index) => (
                 <RadioButton
                   key={index}
@@ -127,26 +151,26 @@ export default function ProductDetailsScreen({ navigation, route }) {
               ))}
             </View>
             {/* Qty */}
-            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-              <View style={{ marginHorizontal: 15 }}>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginHorizontal: 10 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginRight: 10 }}>
                 <BorderlessButton
                   style={styles.qtyButton}
-                  rippleColor="#EAEAEA"
-                  onPress={() => alert('selam')}
+                  rippleColor={grey}
+                  onPress={() => dispatch({ type: 'QTY_DECREMENT' })}
                 >
                   <View style={styles.qtyButtonBorders}>
                     <Text style={styles.qtyButtonText}>-</Text>
                   </View>
                 </BorderlessButton>
               </View>
-              <View>
-                <Text style={{ fontWeight: 'bold', fontSize: 15 }}>2</Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginHorizontal: 10 }}>
+                <Text style={{ fontWeight: 'bold', fontSize: 15 }}>{state.qty}</Text>
               </View>
-              <View style={{ marginHorizontal: 15 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginLeft: 10 }}>
                 <BorderlessButton
                   style={styles.qtyButton}
-                  rippleColor="#EAEAEA"
-                  onPress={() => alert('selam')}
+                  rippleColor={grey}
+                  onPress={() => dispatch({ type: 'QTY_INCREMENT' })}
                 >
                   <View style={styles.qtyButtonBorders}>
                     <Text style={styles.qtyButtonText}>+</Text>
@@ -155,25 +179,46 @@ export default function ProductDetailsScreen({ navigation, route }) {
               </View>
             </View>
           </View>
-          {/* Size Button Group */}
-          <View style={{ flex: 0.7, marginHorizontal: 5 }}>
-            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-              {sizes.flatMap((size, index) => (
-                <ButtonGroup
-                  key={index}
-                  size={size}
-                  selectedIndex={index}
-                  selected={state.sizeSelectedIndex === index}
-                />
-              ))}
+          {/* Pick Size & Add to Cart Button */}
+          <View style={{ flex: 0.8, flexDirection: 'row', alignItems: 'center', marginHorizontal: 15 }}>
+            {/* Pick Size */}
+            <View style={{ flex: 1, marginVertical: 10, marginHorizontal: 10 }}>
+              <RectButton
+                rippleColor={grey}
+                style={styles.rectPickSizeButton}
+                onPress={() => {
+                  navigation.navigate('SizeModal', {
+                    parentState: state,
+                    parentDispatch: dispatch,
+                  });
+                }}
+              >
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }} accessible>
+                  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={{ fontWeight: 'bold', fontSize: 15, color: white }}>Beden Seç</Text>
+                  </View>
+                  <View style={{ justifyContent: 'center', alignItems: 'center', marginHorizontal: 10}}>
+                    <SimpleLineIcons name="arrow-down" size={24} color="white" />
+                  </View>
+                </View>
+              </RectButton>
             </View>
-          </View>
-          {/* Add to Cart Button */}
-          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', marginHorizontal: 5 }}>
-            <View style={{ flex: 1, margin: 10 }}>
-              <RectButton rippleColor="#EAEAEA" style={styles.rectButton} onPress={() => alert('selam')}>
-                <View accessible>
-                  <Text style={{ fontWeight: 'bold', fontSize: 20, color: '#FFFFFF' }}>Karta Ekle</Text>
+            {/* Add to Cart Button */}
+            <View style={{ flex: 1, marginVertical: 10, marginHorizontal: 10 }}>
+              <RectButton
+                rippleColor={grey}
+                style={[styles.rectAddToCartButton,
+                  state.sizeSelected ? { backgroundColor: tomato } : { backgroundColor: grey }]}
+                onPress={() => alert('selam')}
+                enabled={!!state.sizeSelected}
+              >
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }} accessible>
+                  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={{ fontWeight: 'bold', fontSize: 15, color: white }}>Karta Ekle</Text>
+                  </View>
+                  <View style={{ justifyContent: 'center', alignItems: 'center', marginHorizontal: 10}}>
+                    <SimpleLineIcons name="arrow-right" size={24} color="white" />
+                  </View>
                 </View>
               </RectButton>
             </View>
