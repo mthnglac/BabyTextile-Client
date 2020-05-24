@@ -118,12 +118,15 @@ export default function Carousel(props) {
     internalDotColor,
     cardShadow,
     navigation,
+    // eslint-disable-next-line react/prop-types
+    forwardedRef,
   } = props;
   const { state, dispatch } = React.useContext(CarouselInfoContext);
 
   return (
     <View style={styles.container}>
       <FlatList
+        ref={forwardedRef}
         data={data}
         keyExtractor={(item, index) => `key${index}`}
         horizontal

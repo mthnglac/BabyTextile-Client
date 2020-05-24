@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, YellowBox } from 'react-native';
 import { RectButton, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { TransitionPresets } from '@react-navigation/stack';
 
@@ -43,6 +43,10 @@ const styles = StyleSheet.create({
 
 
 export default function SizeModalScreen({ navigation, route }) {
+  YellowBox.ignoreWarnings([
+    'Non-serializable values were found in the navigation state',
+  ]);
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       ...TransitionPresets.ModalPresentationIOS,

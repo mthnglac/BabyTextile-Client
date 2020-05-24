@@ -18,7 +18,6 @@ const tomato = '#FE6C6B';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'grey',
   },
   qtyButton: {
     width: 40,
@@ -69,7 +68,8 @@ export default function ProductDetailsScreen({ navigation, route }) {
     });
   }, [navigation]);
 
-  const colors = [yellow, blue, red];
+  const carouselRef = React.useRef(null);
+  const colors = route.params?.colors;
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -114,25 +114,40 @@ export default function ProductDetailsScreen({ navigation, route }) {
     },
   );
 
+  React.useEffect(() => {
+    dispatch({ type: 'UPDATE_SCROLL', setScrollXInfo: new Animated.Value(0) });
+    carouselRef.current.scrollToOffset({ offset: 0, animated: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.colorSelectedIndex]);
+
   return (
     <CarouselInfoContext.Provider value={{ state, dispatch }}>
       <View style={styles.container}>
         <View style={{ flex: 1, alignItems: 'center' }}>
           <Carousel
-            data={route.params?.product?.productimage_set}
+            forwardedRef={carouselRef}
+            data={route.params?.product?.productimage_set.filter(
+              (imageSet) => imageSet.color.slug === colors[state.colorSelectedIndex])}
             navigation={navigation}
             internalText={false}
             internalDot
             internalDotColor={white}
-            cardShadow={false}
           />
         </View>
-        <View style={{ flex: 0.8, backgroundColor: '#FFFFFF', borderTopLeftRadius: 40, borderTopRightRadius: 40 }}>
+        <View style={{ flex: 0.6, borderTopLeftRadius: 40, borderTopRightRadius: 40 }}>
           {/* Description */}
-          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', marginHorizontal: 15 }}>
-            <View style={{ flex: 1, marginHorizontal: 10 }}>
+          <View style={{ flex: 1, alignItems: 'flex-start', marginHorizontal: 15 }}>
+            <View style={{ flexDirection: 'row'}}>
+              <View style={{ flex: 1, marginHorizontal: 10, marginBottom: 5, marginTop: 15 }}>
+                <Text style={{ fontWeight: 'bold', fontSize: 15 }}>15613</Text>
+              </View>
+              <View style={{ flex: 1, alignItems: 'flex-end', marginHorizontal: 10, marginBottom: 5, marginTop: 15 }}>
+                <Text style={{ fontWeight: 'bold', fontSize: 15 }}>49.90$</Text>
+              </View>
+            </View>
+            <View style={{ flex: 1, marginHorizontal: 10, marginVertical: 5 }}>
               <Text>
-                @ Urun kodu: 15613 @ Fiyat: 49.90$, @ Iki iplik kumas cepli elbise
+                Iki iplik Iki iplik Iki iplik kumas cepli elbise
               </Text>
             </View>
           </View>
