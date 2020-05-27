@@ -18,13 +18,12 @@ const styles = StyleSheet.create({
     margin: 8,
     width: 7,
     height: 7,
-    backgroundColor: grey,
     borderRadius: 5,
   },
 });
 
 export default function Dot(props) {
-  const { data } = props;
+  const { data, color } = props;
   const { state } = React.useContext(CarouselInfoContext);
   const position = Animated.divide(state.scrollXInfo, width);
 
@@ -37,7 +36,7 @@ export default function Dot(props) {
           extrapolate: 'clamp',
         });
         return (
-          <Animated.View key={index} style={[styles.dot, { opacity }]} />
+          <Animated.View key={index} style={[styles.dot, { opacity, backgroundColor: color }]} />
         );
       })}
     </View>
@@ -46,4 +45,8 @@ export default function Dot(props) {
 
 Dot.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  color: PropTypes.string,
+};
+Dot.defaultProps = {
+  color: grey,
 };
