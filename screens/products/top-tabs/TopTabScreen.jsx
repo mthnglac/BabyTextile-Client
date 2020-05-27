@@ -104,7 +104,7 @@ export default function TopFirstScreen({ navigation, route }) {
       dispatch({ type: 'PRODUCTS', products: responseJSON });
       dispatch({ type: 'REFRESH', isRefresh: false });
     },
-    [state.refreshing],
+    [route.name],
   );
 
   useScrollToTop(ref);
@@ -128,9 +128,18 @@ export default function TopFirstScreen({ navigation, route }) {
       <TouchableOpacity
         key={item.pk}
         style={styles.box}
-        onPress={() => navigation.navigate('ProductDetails', {
-          product: item,
-        })}
+        onPress={() => {
+          const colors = [];
+          // eslint-disable-next-line react/prop-types
+          item.color.forEach((element) => {
+            colors.push(element.slug);
+          });
+
+          navigation.navigate('ProductDetails', {
+            product: item,
+            colors,
+          });
+        }}
       >
         <Image style={styles.boxImage} source={{ uri: item.productimage_set[0].image }} />
       </TouchableOpacity>
