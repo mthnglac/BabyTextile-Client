@@ -1,8 +1,9 @@
 import * as React from 'react';
 import {
   Image, SafeAreaView, StyleSheet, TouchableOpacity,
-  View, RefreshControl, AsyncStorage,
+  View, RefreshControl,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { useScrollToTop } from '@react-navigation/native';
 import { FlatList } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';

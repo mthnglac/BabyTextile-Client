@@ -1,7 +1,8 @@
 import * as React from 'react';
 import {
-  AsyncStorage, Platform, StatusBar, StyleSheet, View,
+  Platform, StatusBar, StyleSheet, View,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import useCachedResources from './hooks/useCachedResources';
@@ -150,29 +151,16 @@ export default function App(props) {
       <NavigationContainer linking={LinkingConfiguration}>
         <AuthContext.Provider value={authContext}>
           <Stack.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
-            {/*{*/}
-            {/*  state.userToken == null ? (*/}
-            {/*    <Stack.Screen*/}
-            {/*      name={signInScreenInfo.name}*/}
-            {/*      component={signInScreenInfo.component}*/}
-            {/*      options={{*/}
-            {/*        headerShown: signInScreenInfo.options.headerShown,*/}
-            {/*      }}*/}
-            {/*    />*/}
-            {/*  ) : screenInfo.flatMap((screen, index) => (*/}
-            {/*    <Stack.Screen*/}
-            {/*      name={screen.name}*/}
-            {/*      component={screen.component}*/}
-            {/*      options={{*/}
-            {/*        headerShown: screen.options.headerShown,*/}
-            {/*      }}*/}
-            {/*      key={index}*/}
-            {/*    />*/}
-            {/*  ))*/}
-            {/*}*/}
-
             {
-              screenInfo.flatMap((screen, index) => (
+              state.userToken == null ? (
+                <Stack.Screen
+                  name={signInScreenInfo.name}
+                  component={signInScreenInfo.component}
+                  options={{
+                    headerShown: signInScreenInfo.options.headerShown,
+                  }}
+                />
+              ) : screenInfo.flatMap((screen, index) => (
                 <Stack.Screen
                   name={screen.name}
                   component={screen.component}
@@ -183,6 +171,19 @@ export default function App(props) {
                 />
               ))
             }
+
+            {/*{*/}
+            {/*  screenInfo.flatMap((screen, index) => (*/}
+            {/*    <Stack.Screen*/}
+            {/*      name={screen.name}*/}
+            {/*      component={screen.component}*/}
+            {/*      options={{*/}
+            {/*        headerShown: screen.options.headerShown,*/}
+            {/*      }}*/}
+            {/*      key={index}*/}
+            {/*    />*/}
+            {/*  ))*/}
+            {/*}*/}
           </Stack.Navigator>
         </AuthContext.Provider>
       </NavigationContainer>
