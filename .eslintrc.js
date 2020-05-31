@@ -5,15 +5,14 @@ module.exports = {
     node: true,
   },
   extends: [
-    'airbnb',
     'plugin:react/recommended',
-    'plugin:@typescript-eslint/recommended',
+    'airbnb',
   ],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
   },
-  parser: '@typescript-eslint/parser',
+  parser: 'babel-eslint',
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -23,18 +22,9 @@ module.exports = {
   },
   plugins: [
     'react',
-    '@typescript-eslint',
     'react-hooks',
   ],
-  settings: {
-    'import/resolver': {
-      typescript: {}, // this loads <rootdir>/tsconfig.json to eslint
-    },
-  },
   rules: {
-    // any
-    '@typescript-eslint/no-explicit-any': 'off',
-    '@typescript-eslint/explicit-function-return-type': 'off',
     // hooks
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
@@ -46,20 +36,8 @@ module.exports = {
     'global-require': 0,
     // console.log stuff
     'no-console': 'off',
-    // import/extensions
-    'import/extensions': [
-      'error',
-      'ignorePackages',
-      {
-        js: 'never',
-        mjs: 'never',
-        jsx: 'never',
-        ts: 'never',
-        tsx: 'never',
-      },
-    ],
-    // jsx-filename-extension
-    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
+    // props validation ignoring for react navigation
+    'react/prop-types': ['error', { ignore: ['navigation', 'route'] }],
     // camelcase
     camelcase: 'off',
   },
