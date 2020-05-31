@@ -30,7 +30,7 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'warn',
     // underscore
     'no-underscore-dangle': 'off',
-    // ++ error
+    // ++ / plusplus
     'no-plusplus': 'off',
     // for require and stuff
     'global-require': 0,
